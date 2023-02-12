@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+
+joint:
+  kafka:
+    bootstrapServers: 127.0.0.1:9091
+    eventMessageTopic: tds-event-message
+    eventMessageConsumerGroup: event-message-group
+    eventMessageOffset: earliest
+
+infra:
+  mq:
+    kafka:
+      bootstrapServers: 127.0.0.1:9091
+      eventMessageTopic: tds-event-message
+      timeout: 1000
+
+# spring kafka built-in kafka config properties
+# Temporarily not be used in this demo case
+#spring:
+#  kafka:
+#    bootstrap-servers: localhost:9092
