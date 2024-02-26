@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import per.itachi.java.mq.kafka.infra.mq.kafka.KafkaProducerPort;
+import per.itachi.java.mq.kafka.app.port.mq.KafkaProducerPort;
 
 /**
  * To simplify the demo writing, joint layer may invoke the infra layer.

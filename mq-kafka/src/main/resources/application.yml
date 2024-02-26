@@ -4,20 +4,66 @@ server:
 
 joint:
   kafka:
-    bootstrapServers: 127.0.0.1:9091
-    eventMessageTopic: tds-event-message
-    eventMessageConsumerGroup: event-message-group
-    eventMessageOffset: earliest
+    svc:
+      bootstrapServers: 127.0.0.1:9090
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      eventMessageTopic: tds-event-message
+      eventMessageConsumerGroup: event-message-group
+      eventMessageOffset: earliest
+      interceptor-classes-config:
+        - per.itachi.java.mq.kafka.joint.kafka.interceptor.ContextLoggingConsumerInterceptor
+        - per.itachi.java.mq.kafka.joint.kafka.interceptor.Order1ConsumerInterceptor
+        - per.itachi.java.mq.kafka.joint.kafka.interceptor.Order2ConsumerInterceptor
+      security-protocol: PLAINTEXT
+      # for security-protocol = SSL
+      ssl-key-password: placeholder
+      ssl-truststore-location: certs/ssl/kafka.server.truststore.jks
+      ssl-truststore-password: placeholder
+      ssl-keystore-location: certs/ssl/kafka.server.keystore.jks
+      ssl-keystore-password: placeholder
 
+      kafka-consumer-topic-properties-map:
+        produceMessage:
+          topic-name: mqkafka-message-in
+          consumer-group: mqkafka-group
 infra:
   mq:
     kafka:
-      bootstrapServers: 127.0.0.1:9091
+      bootstrapServers: 127.0.0.1:9090
       eventMessageTopic: tds-event-message
       timeout: 1000
+    restful:
+      connection-timeout: 10000
+  kafka:
+    svc:
+      bootstrap-servers: 127.0.0.1:9090
+      enable-auto-commit: false
+      auto-commit-interval-ms: 10000
+      session-timeout-ms: 60000
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      group-id: mq-kafka-springboot
+      auto-offset-reset: false # no idea
+  restful:
+    svc:
+      url: 127.0.0.1:8060
+      connection-timeout: 10000
+
 
 # spring kafka built-in kafka config properties
 # Temporarily not be used in this demo case
 #spring:
 #  kafka:
-#    bootstrap-servers: localhost:9092
+#    bootstrap-servers: 127.0.0.1:9092
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      batch-size: 8192
+#    consumer:
+#      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringSerializer
+#      group-id: consumer-grp-name
+#      enable-auto-commit: false
+#    listener:
+#      ack-mode: manual
